@@ -1,9 +1,12 @@
 {
   "name": "react-scripts",
-  "version": "2.1.1",
+  "version": "2.1.1-alpha-0",
   "description": "Configuration and scripts for Create React App.",
   "repository": "facebook/create-react-app",
   "license": "MIT",
+  "scripts": {
+    "publish": "npm publish --access public"
+  },
   "engines": {
     "node": ">=6"
   },

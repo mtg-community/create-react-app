@@ -345,7 +345,7 @@ module.exports = function(webpackEnv) {
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: paths.appSrc,
+              include: new RegExp(`${paths.appSrc}|${paths.sharedNodeModules}`),
               loader: require.resolve('babel-loader'),
               options: {
                 customize: require.resolve(
@@ -407,6 +407,10 @@ module.exports = function(webpackEnv) {
                   [
                     require.resolve('babel-preset-react-app/dependencies'),
                     { helpers: true },
+                  ],
+                  [
+                    require.resolve('babel-preset-react-app'),
+                    { "flow": true, "typescript": false },
                   ],
                 ],
                 cacheDirectory: true,
