@@ -325,6 +325,27 @@ module.exports = function(webpackEnv) {
           ],
           include: paths.appSrc,
         },
+        // CUSTOM CODE
+        // Process MTG-X Core module
+        {
+          test: /\.(js|mjs|jsx|ts|tsx)$/,
+          include: paths.sharedNodeModules,
+          loader: require.resolve('babel-loader'),
+          options: {
+            babelrc: true,
+            configFile: paths.coreBabelFile,
+            compact: false,
+            presets: [
+              require.resolve('@babel/preset-env'),
+              require.resolve('@babel/preset-flow'),
+              require.resolve('babel-preset-react-app'),
+            ],
+            plugins: [
+              require.resolve('@babel/plugin-proposal-class-properties'),
+            ],
+            sourceMaps: true,
+          },
+        },
         {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
@@ -345,7 +366,7 @@ module.exports = function(webpackEnv) {
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: new RegExp(`${paths.appSrc}|${paths.sharedNodeModules}`),
+              include: paths.appSrc,
               loader: require.resolve('babel-loader'),
               options: {
                 customize: require.resolve(
@@ -391,34 +412,6 @@ module.exports = function(webpackEnv) {
                 cacheDirectory: true,
                 cacheCompression: isEnvProduction,
                 compact: isEnvProduction,
-              },
-            },
-            // CUSTOM CODE
-            // Process MTG-X Core module
-            {
-              test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: paths.sharedNodeModules,
-              loader: require.resolve('babel-loader'),
-              options: {
-                babelrc: true,
-                configFile: paths.coreBabelFile,
-                compact: false,
-                plugins: [
-                  require.resolve('@babel/plugin-proposal-class-properties'),
-                ],
-                presets: [
-                  require.resolve('@babel/preset-flow'),
-                  require.resolve('@babel/preset-env'),
-                  [
-                    require.resolve('babel-preset-react-app'),
-                    { flow: true, typescript: false },
-                  ],
-                  [
-                    require.resolve('babel-preset-react-app/dependencies'),
-                    { helpers: true },
-                  ],
-                ],
-                sourceMaps: true,
               },
             },
             // Process any JS outside of the app with Babel.
