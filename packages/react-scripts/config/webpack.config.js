@@ -393,6 +393,34 @@ module.exports = function(webpackEnv) {
                 compact: isEnvProduction,
               },
             },
+            // CUSTOM CODE
+            // Process MTG-X Core module
+            {
+              test: /\.(js|mjs|jsx|ts|tsx)$/,
+              include: paths.sharedNodeModules,
+              loader: require.resolve('babel-loader'),
+              options: {
+                babelrc: true,
+                configFile: paths.coreBabelFile,
+                compact: false,
+                plugins: [
+                  require.resolve('@babel/plugin-proposal-class-properties'),
+                ],
+                presets: [
+                  require.resolve('@babel/preset-flow'),
+                  require.resolve('@babel/preset-env'),
+                  [
+                    require.resolve('babel-preset-react-app'),
+                    { flow: true, typescript: false },
+                  ],
+                  [
+                    require.resolve('babel-preset-react-app/dependencies'),
+                    { helpers: true },
+                  ],
+                ],
+                sourceMaps: true,
+              },
+            },
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
             {
@@ -407,10 +435,6 @@ module.exports = function(webpackEnv) {
                   [
                     require.resolve('babel-preset-react-app/dependencies'),
                     { helpers: true },
-                  ],
-                  [
-                    require.resolve('babel-preset-react-app'),
-                    { "flow": true, "typescript": false },
                   ],
                 ],
                 cacheDirectory: true,

@@ -89,6 +89,7 @@ module.exports = {
   proxySetup: resolveApp('src/setupProxy.js'),
   appNodeModules: resolveApp('node_modules'),
   sharedNodeModules: resolveApp('node_modules/core'),
+  coreBabelFile: resolveApp('node_modules/core/babel.config.js'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
 };
